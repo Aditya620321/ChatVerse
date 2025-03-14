@@ -1,6 +1,6 @@
 import { io } from "socket.io-client";
 
-const ENDPOINT = import.meta.env.VITE_BACKEND_URL || "http://localhost:3000";  // Default to localhost
+const ENDPOINT = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";  // Default to localhost
 console.log("Socket connecting to:", ENDPOINT);  // Debugging
 
 const socket = io(ENDPOINT, {
