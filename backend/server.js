@@ -6,9 +6,14 @@ const mongoose = require("mongoose");
 const path = require('path')
 
 const app = express();
-
+app.use(
+	cors({
+	  origin: process.env.FRONTEND_URL || "http://localhost:5173", // Allow frontend
+	  credentials: true, // Allow cookies & authentication headers
+	})
+  );
 const corsOptions = {
-	origin: process.env.FRONTEND_URL,
+	origin: process.env.FRONTEND_URL || "http://localhost:5173",
 	methods: ["GET", "POST", "DELETE"],
 	allowedHeaders: ["Content-Type", "Authorization"],
 	credentials: true,
@@ -51,19 +56,13 @@ app.use("/api/message", messageRouter);
 // --------------------Deployment-----------------------
 
 
-const __dirname1= path.resolve()
-if(process.env.NODE_ENV === "production"){
-  app.use(express.static(path.join(__dirname1,"/frontend/build")));
-
-  app.get('*',(req,res)=>{
-	res.sendFile(path.resolve(__dirname1,"frontend","build","index.html"))
-  })
-}
-else{
-	app.get("/",(req,res)=>{
-		res.send("API is Running Successfully");
+app.get("/", (req, res) => {
+	res.json({
+	  message: "Welcome to ChatVerse API!",
+	  frontend_url: process.env.FRONTEND_URL,
 	});
-}
+  });
+  
 // --------------------Deployment-----------------------
 
 // Invaild routes
