@@ -5,6 +5,16 @@ import dotenv from "dotenv";
 dotenv.config();
 const app = express();
 
+app.use(cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
+
+app.options("*", cors({
+  origin: process.env.FRONTEND_URL,
+  credentials: true,
+}));
+
 const server = http.createServer(app);
 const io = new Server(server, {
   cors: {
