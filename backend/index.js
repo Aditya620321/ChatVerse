@@ -28,36 +28,29 @@ app.use(cors({
   credentials: true,
 }));
 
-app.options("*", cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS policy violation"), false);
-    }
-  },
-  credentials: true,
-}));
-
 app.use(express.json());
 app.use(cookieParser());
 
-const PORT = process.env.PORT || 5002;
-const URI = process.env.MONGODB_URI;
-
-mongoose.connect(URI)
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((error) => console.error("MongoDB connection error:", error));
-
-app.get('/', (req, res) => {
-  res.send('Backend is running');
+app.get("/", (req, res) => {
+  res.send("Backend is running");
 });
 
 app.use("/api/user", userRoute);
 app.use("/api/message", messageRoute);
 
-const { server } = setupSocketIO(app);
+const PORT = process.env.PORT || 5002;
+const URI = process.env.MONGODB_URI;
 
-server.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-});
+mongoose.connect(URI)
+  .then(() => {
+    console.log("Connected to MongoDB");
+
+    const { server } = setupSocketIO(app);
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+  })
+  .catch((error) => {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  });
