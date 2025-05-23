@@ -18,6 +18,12 @@ app.use(cors({
   credentials: true,
 }));
 
+app.options('*', cors({
+  origin: "https://chatverse-frontend-yla8.onrender.com",
+  credentials: true,
+}));
+
+
 const PORT = process.env.PORT || 5002;
 const URI = process.env.MONGODB_URI;
 
