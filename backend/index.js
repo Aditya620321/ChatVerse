@@ -18,16 +18,12 @@ const allowedOrigins = [
   "https://chatverse-frontend-yla8.onrender.com"
 ];
 
+const cors = require('cors');
 app.use(cors({
-  origin: function (origin, callback) {
-    if (!origin || allowedOrigins.includes(origin)) {
-      callback(null, true);
-    } else {
-      callback(new Error("CORS policy violation"), false);
-    }
-  },
-  credentials: true,
+  origin: 'https://chatverse-frontend-yla8.onrender.com',
+  credentials: true
 }));
+
 
 app.options("*", cors()); // Handle preflight requests for all routes
 
