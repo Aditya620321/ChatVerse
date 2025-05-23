@@ -14,7 +14,7 @@ dotenv.config();
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
-  origin: "https://chatverse-frontend.onrender.com",
+  origin: "https://chatverse-frontend-yla8.onrender.com",
   credentials: true,
 }));
 
