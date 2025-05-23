@@ -12,8 +12,11 @@ dotenv.config();
 
 const app = express();
 
+import cors from "cors";
+
 const allowedOrigins = [
   "http://localhost:3000",
+  "http://localhost:3001",
   "https://chatverse-frontend-yla8.onrender.com"
 ];
 
@@ -27,6 +30,9 @@ app.use(cors({
   },
   credentials: true,
 }));
+
+app.options("*", cors()); // Handle preflight requests for all routes
+
 
 app.use(express.json());
 app.use(cookieParser());

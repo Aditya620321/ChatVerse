@@ -13,6 +13,7 @@ export const SocketProvider = ({ children }) => {
   const [onlineUsers, setOnlineUsers] = useState([]);
   const [authUser] = useAuth();
 
+  
   useEffect(() => {
     if (authUser) {
       const socket = io(import.meta.env.VITE_BACKEND_URL, {
