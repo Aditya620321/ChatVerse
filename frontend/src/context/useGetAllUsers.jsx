@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import axios from "axios";
+
 function useGetAllUsers() {
   const [allUsers, setAllUsers] = useState([]);
   const [loading, setLoading] = useState(false);
+
   useEffect(() => {
     const getUsers = async () => {
       setLoading(true);
@@ -15,14 +17,25 @@ function useGetAllUsers() {
             Authorization: `Bearer ${token}`,
           },
         });
-        setAllUsers(response.data);
-        setLoading(false);
+
+        if (Array.isArray(response.data)) {
+          setAllUsers(response.data);
+        } else {
+          console.error("Expected array, got:", response.data);
+          setAllUsers([]); // fallback
+        }
+
       } catch (error) {
-        console.log("Error in useGetAllUsers: " + error);
+        console.error("Error in useGetAllUsers:", error);
+        setAllUsers([]);
+      } finally {
+        setLoading(false);
       }
     };
+
     getUsers();
   }, []);
+
   return [allUsers, loading];
 }
 
