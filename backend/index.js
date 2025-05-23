@@ -17,8 +17,6 @@ const allowedOrigins = [
   "http://localhost:3001",
   "https://chatverse-frontend-yla8.onrender.com"
 ];
-
-const cors = require('cors');
 app.use(cors({
   origin: 'https://chatverse-frontend-yla8.onrender.com',
   credentials: true
