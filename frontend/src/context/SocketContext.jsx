@@ -15,11 +15,12 @@ export const SocketProvider = ({ children }) => {
 
   useEffect(() => {
     if (authUser) {
-      const socket = io("http://localhost:4002", {
-        query: {
-          userId: authUser.user._id,
-        },
-      });
+      const socket = io(import.meta.env.VITE_BACKEND_URL, {
+  query: {
+    userId: authUser.user._id,
+  },
+  transports: ["websocket"], // optional, to enforce WS connection
+});
       setSocket(socket);
       socket.on("getOnlineUsers", (users) => {
         setOnlineUsers(users);
