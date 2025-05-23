@@ -21,12 +21,10 @@ app.use(cors({
 const PORT = process.env.PORT || 5002;
 const URI = process.env.MONGODB_URI;
 
-try {
-    mongoose.connect(URI);
-    console.log("Connected to MongoDB");
-} catch (error) {
-    console.log(error);
-}
+mongoose.connect(URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((error) => console.error("MongoDB connection error:", error));
+
 
 //routes
 app.use("/api/user", userRoute);
