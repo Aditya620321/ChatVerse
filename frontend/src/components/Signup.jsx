@@ -28,7 +28,7 @@ function Signup() {
       confirmPassword: data.confirmPassword,
     };
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-    await axios.post(`${BACKEND_URL}/api/user/login`, userInfo, {
+    await axios.post(`${BACKEND_URL}/api/user/signup`, userInfo, {
   withCredentials: true,
 })
       .then((response) => {
