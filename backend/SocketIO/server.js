@@ -1,55 +1,62 @@
 import { Server } from "socket.io";
 import http from "http";
-import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 
 dotenv.config();
-const app = express();
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  "http://localhost:3000",
+  "https://chatverse-frontend-yla8.onrender.com"
+];
 
-app.options("*", cors({
-  origin: process.env.FRONTEND_URL,
-  credentials: true,
-}));
+let io;
 
-const server = http.createServer(app);
-const io = new Server(server, {
-  cors: {
-    origin: process.env.FRONTEND_URL,
-    methods: ["GET", "POST"],
-    credentials: true,
-  },
-});
+function setupSocketIO(app) {
+  const server = http.createServer(app);
 
-// realtime message code goes here
-export const getReceiverSocketId = (receiverId) => {
-  return users[receiverId];
-};
-
-const users = {};
-
-// used to listen events on server side.
-io.on("connection", (socket) => {
-  console.log("a user connected", socket.id);
-  const userId = socket.handshake.query.userId;
-  if (userId) {
-    users[userId] = socket.id;
-    console.log("Hello ", users);
-  }
-  // used to send the events to all connected users
-  io.emit("getOnlineUsers", Object.keys(users));
-
-  // used to listen client side events emitted by server side (server & client)
-  socket.on("disconnect", () => {
-    console.log("a user disconnected", socket.id);
-    delete users[userId];
-    io.emit("getOnlineUsers", Object.keys(users));
+  io = new Server(server, {
+    cors: {
+      origin: function (origin, callback) {
+        if (!origin || allowedOrigins.includes(origin)) {
+          return callback(null, true);
+        } else {
+          return callback(new Error("Socket.IO CORS policy violation"), false);
+        }
+      },
+      methods: ["GET", "POST"],
+      credentials: true,
+    },
   });
-});
 
-export { app, io, server };
+  const users = {};
+
+  io.on("connection", (socket) => {
+    console.log("A user connected", socket.id);
+
+    const userId = socket.handshake.query.userId;
+    if (userId) {
+      users[userId] = socket.id;
+      console.log("Connected users:", users);
+    }
+
+    io.emit("getOnlineUsers", Object.keys(users));
+
+    socket.on("disconnect", () => {
+      console.log("A user disconnected", socket.id);
+      if (userId) {
+        delete users[userId];
+      }
+      io.emit("getOnlineUsers", Object.keys(users));
+    });
+  });
+
+  return { server, io };
+}
+
+const getReceiverSocketId = (receiverId) => {
+  return io ? io.sockets?.sockets?.get(receiverId) : null;
+};
+z
+export { setupSocketIO, getReceiverSocketId };

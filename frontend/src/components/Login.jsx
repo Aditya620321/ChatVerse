@@ -14,30 +14,34 @@ function Login() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    const userInfo = {
-      email: data.email,
-      password: data.password,
-    };
-
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-axios.post(`${BACKEND_URL}/api/user/login`, userInfo, {
-  withCredentials: true,
-})
-.then((response) => {
-        if (response.data) {
-          toast.success("Login successful");
-        }
-        localStorage.setItem("ChatApp", JSON.stringify(response.data));
-        setAuthUser(response.data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error("Error: " + error.response.data.error);
-        }
-      });
+const onSubmit = (data) => {
+  const userInfo = {
+    email: data.email,
+    password: data.password,
   };
+
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  axios.post(`${BACKEND_URL}/api/user/login`, userInfo, {
+    withCredentials: true,
+  })
+  .then((response) => {
+    if (response.data) {
+      toast.success("Login successful");
+      localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      setAuthUser(response.data);
+    } else {
+      toast.error("Login failed: no data received");
+    }
+  })
+  .catch((error) => {
+    if (error.response) {
+      toast.error("Error: " + error.response.data.error);
+    } else {
+      toast.error("Network or server error");
+    }
+  });
+};
+
   return (
     <>
       <div className="flex h-screen items-center justify-center">
