@@ -12,11 +12,12 @@ function useGetAllUsers() {
       try {
         const token = Cookies.get("jwt");
         const response = await axios.get("/api/user/allusers", {
-          credentials: "include",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+  withCredentials: true,
+  headers: {
+    Authorization: `Bearer ${token}`,
+  },
+});
+
 
         if (Array.isArray(response.data)) {
           setAllUsers(response.data);
