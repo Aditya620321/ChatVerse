@@ -9,7 +9,10 @@ function Logout() {
   const handleLogout = async () => {
     setLoading(true);
     try {
-      const res = await axios.post("/api/user/logout");
+      const res = await axios.post(`${import.meta.env.VITE_BACKEND_URL}/api/user/login`, userInfo, {
+  withCredentials: true,
+})
+;
       localStorage.removeItem("ChatApp");
       Cookies.remove("jwt");
       setLoading(false);
