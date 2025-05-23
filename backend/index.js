@@ -13,10 +13,13 @@ dotenv.config();
 // middleware
 app.use(express.json());
 app.use(cookieParser());
+const cors = require("cors");
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL,
-    credentials: true,
-  }));
+  origin: "https://chatverse-frontend.onrender.com",
+  credentials: true,
+}));
+
 
 const PORT = process.env.PORT || 5002;
 const URI = process.env.MONGODB_URI;
