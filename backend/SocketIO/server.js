@@ -1,7 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
 import dotenv from "dotenv";
-import cors from "cors";
 
 dotenv.config();
 
@@ -12,7 +11,7 @@ const allowedOrigins = [
 ];
 
 let io;
-const users = {}; 
+const users = {};
 
 function setupSocketIO(app) {
   const server = http.createServer(app);
