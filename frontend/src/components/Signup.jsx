@@ -29,7 +29,7 @@ const onSubmit = async (data) => {
     password: data.password,
     confirmPassword: data.confirmPassword,
   };
-  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  const BACKEND_URL = "https://chatverse-backend-23lc.onrender.com";
   await axios
     .post(`${BACKEND_URL}/api/user/signup`, userInfo, {
       withCredentials: true,
