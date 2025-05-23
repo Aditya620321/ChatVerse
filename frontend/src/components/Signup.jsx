@@ -20,30 +20,35 @@ function Signup() {
     return value === password || "Passwords do not match";
   };
 
-  const onSubmit = async (data) => {
-    const userInfo = {
-      fullname: data.fullname,
-      email: data.email,
-      password: data.password,
-      confirmPassword: data.confirmPassword,
-    };
-    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-    await axios.post(`${BACKEND_URL}/api/user/signup`, userInfo, {
-  withCredentials: true,
-})
-      .then((response) => {
-        if (response.data) {
-          toast.success("Signup successful");
-        }
-        localStorage.setItem("ChatApp", JSON.stringify(response.data));
-        setAuthUser(response.data);
-      })
-      .catch((error) => {
-        if (error.response) {
-          toast.error("Error: " + error.response.data.error);
-        }
-      });
+  const navigate = useNavigate();
+
+const onSubmit = async (data) => {
+  const userInfo = {
+    fullname: data.fullname,
+    email: data.email,
+    password: data.password,
+    confirmPassword: data.confirmPassword,
   };
+  const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+  await axios
+    .post(`${BACKEND_URL}/api/user/signup`, userInfo, {
+      withCredentials: true,
+    })
+    .then((response) => {
+      if (response.data) {
+        toast.success("Signup successful");
+      }
+      localStorage.setItem("ChatApp", JSON.stringify(response.data));
+      setAuthUser(response.data);
+      navigate("/login"); // 👈 This redirects to login page
+    })
+    .catch((error) => {
+      if (error.response) {
+        toast.error("Error: " + error.response.data.error);
+      }
+    });
+};
+
   return (
     <>
       <div className="flex h-screen items-center justify-center">
