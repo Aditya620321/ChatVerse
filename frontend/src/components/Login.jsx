@@ -20,9 +20,12 @@ function Login() {
       password: data.password,
     };
 
-    axios
-      .post("/api/user/login", userInfo)
-      .then((response) => {
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+axios.post(`${BACKEND_URL}/api/user/login`, userInfo, {
+  withCredentials: true,
+})
+.then((response) => {
         if (response.data) {
           toast.success("Login successful");
         }
